@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+          
       - name: Install dependencies
         run: npm install
 
@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # ── Stage 2: Continuous Delivery ───────────────────────────────────────────
+  # ── Stage 2: Continuous Delivery ───────────────────────────────────────────
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
@@ -51,11 +51,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ env.IMAGE_NAME }}:latest
+            ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      
