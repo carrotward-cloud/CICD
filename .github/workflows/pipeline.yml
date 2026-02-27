@@ -29,7 +29,7 @@ jobs:
       - name: Run tests
         run: npm test
 
-  # ── Stage 2: Continuous Delivery ───────────────────────────────────────────
+      # ── Stage 2: Continuous Delivery ───────────────────────────────────────────
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
